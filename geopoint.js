@@ -1,8 +1,8 @@
  /**
-  * Represents a point on the surface of a sphere (e.g. Earth)
+  * Represents a point on the surface of the Earth.
   *
-  * This is a JavaScript port of the code originally published at
-  * http://JanMatuschek.de/LatitudeLongitudeBoundingCoordinates#Java
+  * This library is derived from the Java code originally published at
+  * http://JanMatuschek.de/LatitudeLongitudeBoundingCoordinates
   * 
   * @author Jan Philip Matuschek
   * @version 22 September 2010
@@ -19,7 +19,8 @@
       MAX_LAT = Math.PI / 2, // 90 degrees
       MIN_LAT = -MAX_LAT, // -90 degrees
       MAX_LON = Math.PI, // 180 degrees
-      MIN_LON = -MAX_LON; // -180 degrees
+      MIN_LON = -MAX_LON, // -180 degrees
+      FULL_CIRCLE_RAD = Math.PI * 2; // Full cirle (360 degrees) in radians
 
   /**
    * Check if an object is a valid number
@@ -109,6 +110,52 @@
             Math.sin(lat1) * Math.sin(lat2) +
             Math.cos(lat1) * Math.cos(lat2) *
             Math.cos(lon1 - lon2)) * radius;
+  };
+
+  /**
+   * Calculate the bouding coordinates
+   *
+   * @param   {Number}    distance      distance from the point
+   * @param   {Number}    radius        optional sphere radius to use
+   * @param   {Boolean}   inKilometers  true to return the distance in kilometers
+   * @return  {Array}     array containing SW and NE points of bounding box
+   */
+  GeoPoint.prototype.boundingCoordinates = function(distance, radius, inKilometers) {
+    if (!isNumber(distance) || distance <= 0) {
+      throw new Error('Invalid distance');
+    }
+    if (radius === true || radius === false) {
+      inKilometers = radius;
+      radius = null;
+    }
+    if (!isNumber(radius) || radius <= 0) {
+      radius = inKilometers === true ? EARTH_RADIUS_KM : EARTH_RADIUS_MI;
+    }
+    var lat = this.latitude(true),
+        lon = this.longitude(true),
+        radDist = distance / radius,
+        minLat = lat - radDist,
+        maxLat = lat + radDist,
+        minLon,
+        maxLon,
+        deltaLon;
+    if (minLat > MIN_LAT && maxLat < MAX_LAT) {
+      deltaLon = Math.asin(Math.sin(radDist) / Math.cos(lat));
+      minLon = lon - deltaLon;
+      if (minLon < MIN_LON) {
+        minLon += FULL_CIRCLE_RAD;
+      }
+			maxLon = lon + deltaLon;
+			if (maxLon > MAX_LON) {
+        maxLon -= FULL_CIRCLE_RAD;
+      }
+    } else {
+      minLat = Math.max(minLat, MIN_LAT);
+			maxLat = Math.min(maxLat, MAX_LAT);
+			minLon = MIN_LON;
+			maxLon = MAX_LON;
+    }
+    return [new GeoPoint(minLat, minLon, true), new GeoPoint(maxLat, maxLon, true)];
   };
 
   /**
