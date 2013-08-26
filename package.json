@@ -1,6 +1,6 @@
 {
   "name": "geopoint",
-  "description": "Represents a geographic point for node.js and the browser",
+  "description": "Representation of a geographic point for node.js and the browser",
   "version": "1.0.0",
   "author": "David Wood <bitprobe@gmail.com>",
   "repository": {
