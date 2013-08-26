@@ -90,6 +90,28 @@
   };
 
   /**
+   * Calculates the distance between two points
+   *
+   * @param   {Object}    point         GeoPoint instance
+   * @param   {Boolean}   inKilometers  true to return the distance in kilometers
+   * @return  {Number}    distance between points
+   */
+  GeoPoint.prototype.distanceTo = function(point, inKilometers) {
+    if (!(point instanceof GeoPoint)) {
+      throw new Error('Invalid GeoPoint');
+    }
+    var radius = inKilometers === true ? EARTH_RADIUS_KM : EARTH_RADIUS_MI,
+        lat1 = this.latitude(true),
+        lat2 = point.latitude(true),
+        lon1 = this.longitude(true),
+        lon2 = point.longitude(true);
+    return Math.acos(
+            Math.sin(lat1) * Math.sin(lat2) +
+            Math.cos(lat1) * Math.cos(lat2) *
+            Math.cos(lon1 - lon2)) * radius;
+  };
+
+  /**
    * Convert degrees to radians
    *
    * @param   {Number}    value   degree value
