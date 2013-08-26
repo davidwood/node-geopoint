@@ -1,2 +1,2 @@
-module.exports = require('./geolocation');
+module.exports = require('./geopoint');
 
