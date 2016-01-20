@@ -157,6 +157,31 @@
     }
     return [new GeoPoint(minLat, minLon, true), new GeoPoint(maxLat, maxLon, true)];
   };
+  
+  /**
+   * Check if point is in bounding box
+   *
+   * @param   {Array}     boundingBox   array containing SW and NE points of bounding box
+   * @return  {Boolean}   distance between points
+   */
+  GeoPoint.prototype.isInBoundingBox = function(boundingBox) {
+    if (!(boundingBox &&
+        Array.isArray(boundingBox) &&
+        boundingBox.length === 2 &&
+        boundingBox[0] instanceof GeoPoint &&
+        boundingBox[1] instanceof GeoPoint)) {
+      throw new Error('Invalid boundingBox');
+    }
+    var boundingBoxSWGeoPoint = boundingBox[0],
+        boundingBoxNEGeoPoint = boundingBox[1];
+        
+    if (this.longitude() >= boundingBoxSWGeoPoint.longitude() &&
+        this.longitude() <= boundingBoxNEGeoPoint.longitude() &&
+        this.latitude() >= boundingBoxSWGeoPoint.latitude() &&
+        this.latitude() <= boundingBoxNEGeoPoint.latitude())
+      return true;
+    return false;
+  };
 
   /**
    * Convert degrees to radians
