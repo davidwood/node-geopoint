@@ -25,6 +25,7 @@ var GeoPoint = require('geopoint'),
 * `.longitude(inRadians)`: Return the point's longitude. By default, the longitude is in degrees, unless `inRadians` is `true`
 * `.distanceTo(point, inKilometers)`: Calculate the distance to another `GeoPoint` instance. By default, the distance is calculated in miles, unless `inKilometers` is `true`
 * `.boundingCoordinates(distance, radius, inKilometers)`: Calculates the bounding coordinates of `distance` from the point and returns an array with the SW and NE points of the bounding box . If `radius` is not provided, the radius of the Earth will be used. The distance is calculated in miles unless `inKilometers` is `true`
+* `.isInBoundingBox(boundingBox)`: Returns boolean value if the point's latitude and longitude are within the `boundingBox` passed. Bounding box is an array with the SW and NE points of the bounding box as returned by `.boundingCoordinates` method.
 
 ## Static Methods
 
