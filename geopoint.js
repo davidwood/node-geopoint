@@ -3,7 +3,7 @@
   *
   * This library is derived from the Java code originally published at
   * http://JanMatuschek.de/LatitudeLongitudeBoundingCoordinates
-  * 
+  *
   * @author Jan Philip Matuschek
   * @version 22 September 2010
   */
@@ -156,6 +156,34 @@
 			maxLon = MAX_LON;
     }
     return [new GeoPoint(minLat, minLon, true), new GeoPoint(maxLat, maxLon, true)];
+  };
+
+  /**
+   * Get destination point from distance and bearing
+   *
+   * @param   {Number}    distance      distance from the point
+   * @param   {Number}    bearing       degrees from 0 to 360 (clockwise from north)
+   * @param   {Boolean}   inKilometers  true to return the distance in kilometers
+   * @return  {GeoPoint}  destina­tion point
+   */
+  GeoPoint.prototype.destinationPoint = function(distance, bearing, inKilometers) {
+    if (!isNumber(distance) || distance <= 0) {
+      throw new Error('Invalid distance');
+    }
+    if (bearing === true || bearing === false) {
+      inKilometers = bearing;
+      bearing = 0;
+    }
+    if(!isNumber(bearing)) bearing = 0;
+    bearing = bearing % 360;
+
+    var radius = inKilometers === true ? EARTH_RADIUS_KM : EARTH_RADIUS_MI;
+        lat = this.latitude(true),
+        lon = this.longitude(true),
+        radDist = distance / radius,
+        lat2 = Math.asin( Math.sin(lat)*Math.cos(radDist) + Math.cos(lat)*Math.sin(radDist)*Math.cos(bearing) ),
+        lon2 = lon + Math.atan2(Math.sin(bearing)*Math.sin(radDist)*Math.cos(lat), Math.cos(radDist)-Math.sin(lat)*Math.sin(lat2));
+    return new GeoPoint(lat2, lon2, true);
   };
 
   /**
