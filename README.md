@@ -39,7 +39,7 @@ The `GeoPoint` constructor is exposed via `window.GeoPoint`.
 
 ## Running Tests
 
-Cachetree tests require [Mocha](http://visionmedia.github.com/mocha/) and can be run with either `npm test`.  You can specify Mocha options, such as the reporter, by adding a [mocha.opts](http://visionmedia.github.com/mocha/#mocha.opts) file, which is ignored by git, to the `test` directory.
+GeoPoint tests require [Mocha](http://visionmedia.github.com/mocha/) and can be run with either `npm test`.  You can specify Mocha options, such as the reporter, by adding a [mocha.opts](http://visionmedia.github.com/mocha/#mocha.opts) file, which is ignored by git, to the `test` directory.
  
 # Credits
 
