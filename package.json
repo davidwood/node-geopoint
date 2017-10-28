@@ -7,17 +7,23 @@
     "type": "git",
     "url": "http://github.com/davidwood/node-geopoint.git"
   },
-  "keywords": ["geolocation", "point", "distance", "bounding box", "radius"],
+  "keywords": [
+    "geolocation",
+    "point",
+    "distance",
+    "bounding box",
+    "radius"
+  ],
   "dependencies": {},
   "devDependencies": {
-    "mocha": "~1.11.0",
-    "istanbul": "~0.1.37"
+    "istanbul": "^0.4.5",
+    "mocha": "^3.5.3"
   },
   "main": "./geopoint.js",
   "engines": {
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "istanbul cover _mocha --check-leaks"
+    "test": "NODE_ENV=test istanbul test _mocha -- --check-leaks --reporter spec --recursive"
   }
 }
